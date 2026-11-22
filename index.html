@@ -219,7 +219,7 @@ footer a{color:#fff}
         <div class="no" id="acct-no"></div>
         <button class="copy" type="button" id="copy">複製帳號</button>
       </div>
-      <label for="f-last5">匯款帳號後五碼 <span class="opt">匯完填上，方便我們對帳</span><input id="f-last5" inputmode="numeric" maxlength="5" placeholder="12345" data-digits></label>
+      <label for="f-last5">匯款帳號後五碼（必填） <span class="opt">請先完成匯款，再填你匯款帳號的最後 5 碼</span><input id="f-last5" inputmode="numeric" maxlength="5" placeholder="12345" data-digits required></label>
       <p class="err" id="err3"></p>
       <button class="btn" type="submit" id="submit3">送出訂單</button>
       <button class="btn ghost" type="button" id="back2">← 回上一步改資料</button>
@@ -340,7 +340,7 @@ var SETTINGS = {
   $('s3').onsubmit=function(e){
     e.preventDefault(); if(sending)return;
     var l5=$('f-last5').value.trim();
-    if(l5&&!/^\d{5}$/.test(l5)){$('err3').textContent='後五碼請填 5 位數字，還沒匯可以先空著';return}
+    if(!/^\d{5}$/.test(l5)){$('err3').textContent=l5?'後五碼要填滿 5 位數字':'請先完成匯款，再填上匯款帳號後五碼才能送出';return}
     $('err3').textContent='';
     var payload={big:q.big,small:q.small,last5:l5,name:form.name,phone:form.phone,email:form.email,addr:form.addr,note:form.note,website:$('f-website').value};
     if(DEMO){
