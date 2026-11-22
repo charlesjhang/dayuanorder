@@ -100,6 +100,10 @@ textarea{min-height:80px;resize:vertical}
 .acct{background:var(--card);border:2px solid var(--blue);border-radius:8px;padding:16px;display:grid;gap:4px}
 .acct .no{font-size:22px;font-weight:700;letter-spacing:.06em;font-variant-numeric:tabular-nums;user-select:all;color:var(--blue-deep)}
 .tag{display:inline-block;font-size:12px;background:#f6d860;color:#3b3000;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.qr{display:grid;justify-items:center;gap:6px;margin-top:10px;padding-top:12px;border-top:1px dashed var(--line);text-align:center}
+.qr img{width:200px;max-width:100%;height:auto;border-radius:6px;background:#fff}
+.qr p{font-size:13px;color:var(--muted);margin:0;max-width:30em}
+.qr b{color:var(--ink)}
 .copy{justify-self:start;border:1px solid var(--blue);background:transparent;color:var(--blue);border-radius:999px;padding:4px 14px;font:500 14px var(--sans);cursor:pointer}
 .done{text-align:center;display:grid;gap:10px;padding-block:20px}
 .done .mark{font-family:var(--serif);font-size:44px;color:var(--green)}
@@ -221,6 +225,11 @@ footer a{color:#fff}
         <div id="acct-holder"></div>
         <div class="no" id="acct-no"></div>
         <button class="copy" type="button" id="copy">複製帳號</button>
+        <div class="qr">
+          <img src="transfer-qr.png" alt="LINE Bank 轉帳 QR Code，帳號 111-0016-57748" width="200" height="200">
+          <p>用銀行 App 掃碼轉帳，<b>金額請自己輸入 <span id="qr-amt"></span></b></p>
+          <p>用手機看這頁的話：長按 QR Code 存到相簿，再到銀行 App 掃碼時選「從相簿」。</p>
+        </div>
       </div>
       <label for="f-last5">匯款帳號後五碼（必填） <span class="opt">請先完成匯款，再填你匯款帳號的最後 5 碼</span><input id="f-last5" inputmode="numeric" maxlength="5" placeholder="12345" data-digits required></label>
       <p class="err" id="err3"></p>
@@ -329,7 +338,7 @@ var SETTINGS = {
     if(form.note)rows.push(['備註',form.note]);
     var h=rows.map(function(r){return '<div class="row"><span>'+r[0]+'</span><span style="text-align:right;word-break:break-all">'+esc(r[1])+'</span></div>'}).join('');
     h+='<div class="row" style="align-items:baseline;margin-top:6px"><span>應匯金額（含運）</span><span class="big">'+fmt(total())+'</span></div>';
-    $('slip').innerHTML=h; show(3);
+    $('slip').innerHTML=h; $('qr-amt').textContent=fmt(total()); show(3);
   };
 
   $('copy').onclick=function(){
