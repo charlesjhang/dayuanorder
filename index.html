@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 <title>芳連伯的鳳梨釋迦</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#3b6a8c">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap">
@@ -346,14 +350,16 @@ var SETTINGS = {
       var d=new Date(),p=function(n){return ('0'+n).slice(-2)};
       done('DY'+p(d.getMonth()+1)+p(d.getDate())+'-'+Math.floor(1000+Math.random()*9000)+'（示範）');return;
     }
-    sending=true; var btn=$('submit3'); btn.disabled=true; btn.textContent='送出中…';
-    fetch(SETTINGS.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)})
+    sending=true; var btn=$('submit3'); btn.disabled=true; btn.textContent='送出中，約需 10 秒，請稍候…';
+    $('err3').style.color='var(--muted)'; $('err3').textContent='正在建立訂單並寄出確認信，請不要關閉頁面。';
+    var ctl=('AbortController' in window)?new AbortController():null, timer=setTimeout(function(){if(ctl)ctl.abort()},60000);
+    fetch(SETTINGS.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ctl?ctl.signal:undefined})
       .then(function(r){return r.json()})
       .then(function(res){if(res.ok)done(res.id);else fail(res.error||'送出失敗，請再試一次')})
-      .catch(function(){fail('網路好像有問題，請再按一次送出；一直不行請私訊我們')})
-      .then(function(){sending=false;btn.disabled=false;btn.textContent='送出訂單'});
+      .catch(function(e){fail(e&&e.name==='AbortError'?'等太久沒有回應。訂單可能已經送出，請先檢查 Email 有沒有收到確認信，沒有的話再私訊我們，避免重複下單。':'網路好像有問題，請再按一次送出；一直不行請私訊我們')})
+      .then(function(){clearTimeout(timer);sending=false;btn.disabled=false;btn.textContent='送出訂單'});
   };
-  function fail(m){$('err3').textContent=m}
+  function fail(m){$('err3').style.color='';$('err3').textContent=m}
   function done(id){$('oid').textContent=id;$('lk-id').value=String(id).replace(/（.*/,'');$('lk-phone').value=form.phone;show(4)}
 
   $('lk').onsubmit=function(e){
