@@ -202,7 +202,6 @@ footer a{color:#fff}
       <label for="f-phone">手機 <span class="opt">只能填數字，共 10 碼</span><input id="f-phone" type="tel" inputmode="numeric" pattern="09[0-9]{8}" maxlength="10" autocomplete="tel-national" placeholder="0912345678" data-digits required></label>
       <label for="f-email">Email <span class="opt">訂單確認信和匯款資訊會寄到這裡</span><input id="f-email" type="email" inputmode="email" autocomplete="email" required></label>
       <label for="f-addr">宅配收件地址<input id="f-addr" autocomplete="street-address" required></label>
-      <input id="f-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
       <label for="f-note">備註 <span class="opt">選填，例如希望到貨時段、送禮</span><textarea id="f-note"></textarea></label>
       <p class="err" id="err2"></p>
       <button class="btn" type="submit">確認訂單，看匯款資訊</button>
@@ -342,7 +341,7 @@ var SETTINGS = {
     var l5=$('f-last5').value.trim();
     if(!/^\d{5}$/.test(l5)){$('err3').textContent=l5?'後五碼要填滿 5 位數字':'請先完成匯款，再填上匯款帳號後五碼才能送出';return}
     $('err3').textContent='';
-    var payload={big:q.big,small:q.small,last5:l5,name:form.name,phone:form.phone,email:form.email,addr:form.addr,note:form.note,website:$('f-website').value};
+    var payload={big:q.big,small:q.small,last5:l5,name:form.name,phone:form.phone,email:form.email,addr:form.addr,note:form.note};
     if(DEMO){
       var d=new Date(),p=function(n){return ('0'+n).slice(-2)};
       done('DY'+p(d.getMonth()+1)+p(d.getDate())+'-'+Math.floor(1000+Math.random()*9000)+'（示範）');return;
