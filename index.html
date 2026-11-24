@@ -263,6 +263,8 @@ footer a{color:#fff}
       <p>訂單已收到，編號 <b id="oid"></b></p>
       <p class="muted">確認信已寄到你的 Email（沒看到請找一下垃圾郵件）。<br>12 月 15 日起依序宅配出貨，寄出當天會再寄信通知你物流單號。</p>
       <p class="muted">請記下訂單編號，之後可以在頁面最下方查詢訂單狀態。</p>
+      <button class="btn" type="button" id="again" style="margin-top:8px">繼續訂購</button>
+      <p class="muted" style="margin:0">要寄到另一個地址、送給親友？再下一張就可以</p>
     </div>
   </section>
 </div></div>
@@ -402,6 +404,12 @@ var SETTINGS = {
       .then(function(){clearTimeout(timer);sending=false;btn.disabled=false;btn.textContent='送出訂單'});
   };
   function fail(m){$('err3').style.color='';$('err3').textContent=m}
+  $('again').onclick=function(){
+    KEYS.forEach(function(k){q[k]=0}); render();
+    ['f-name','f-phone','f-addr','f-note','f-last5'].forEach(function(id){$(id).value=''}); // Email 保留，通常是同一位訂購人
+    $('err2').textContent='';$('err3').textContent='';
+    show(1);
+  };
   function done(id){$('oid').textContent=id;$('lk-id').value=String(id).replace(/（.*/,'');$('lk-phone').value=form.phone;show(4)}
 
   $('lk').onsubmit=function(e){
